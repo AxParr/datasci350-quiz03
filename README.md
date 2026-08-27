@@ -8,7 +8,7 @@ You will do three things in this quiz. First, you will build a local chatbot wit
 
 This quiz is worth 6% of the final grade, and covers lectures 12, 14, 15, 16 and 17. It is open-book and open-notes. It is an individual assessment: please do not discuss the questions with your colleagues during class.
 
-You may use AI tools on the same terms as the rest of the course: they are allowed, and you must be able to explain every command and every line you submit. The instructor may pick about five students at random and ask them to walk through part of their work, during the quiz or right after it. An answer you cannot explain earns no marks.
+You may use AI tools on the same terms as the rest of the course: they are allowed, and you must be able to explain every command and every line you submit. The instructor may ask any student to walk through part of their work, during the quiz or right after it. An answer you cannot explain earns no marks.
 
 ### Rules
 
