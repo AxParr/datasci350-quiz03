@@ -6,7 +6,7 @@
 
 You will do three things in this quiz. First, you will build a local chatbot with Ollama and give it a personality with a `Modelfile`. Second, you will call that model from Python and handle an API key safely. Third, you will rent a Linux machine on AWS EC2, send a small analysis script to it, run it there, and bring the results back.
 
-This quiz is worth 6% of the final grade, and covers lectures 12, 14, 15, 16 and 17. It is open-book and open-notes. It is an individual assessment: please do not discuss the questions with your colleagues during class. You have 75 minutes.
+This quiz is worth 6% of the final grade, and covers lectures 12, 14, 16 and 17 (the second bonus task uses lecture 15). It is open-book and open-notes. It is an individual assessment: please do not discuss the questions with your colleagues during class. You have 75 minutes.
 
 You may use AI tools on the same terms as the rest of the course: they are allowed, and you must be able to explain every command and every line you submit. The instructor may ask any student to walk through part of their work, during the quiz or right after it. An answer you cannot explain earns no marks.
 
@@ -57,31 +57,29 @@ Lecture 12 covers everything in this activity.
 
 ## Activity 2: Keys and calls
 
-Lectures 14 and 15 cover this activity.
+Lecture 14 covers this activity.
 
-7. Write `ollama/ask_local.py`: a script that uses the `openai` package to talk to your local Ollama server, asks your model one question at temperature 0, and prints the reply. The lecture 14 slides show how to point the client at the local server. Run the script twice and note in `commands.txt` whether the two outputs match, with one sentence on why.
+7. Write `ollama/ask_local.py`: a script that uses the `openai` package to talk to your local Ollama server, asks your model one question at temperature 0, and prints the reply. The lecture 14 slides show how to point the client at the local server. Run it and paste the reply into `commands.txt`.
 
-8. Create a `.env` file in the repository root with a fake key line, for example `OPENROUTER_API_KEY=not-a-real-key`. Add `.env` to `.gitignore`, then run `git status` and paste the output into `commands.txt` to show that git no longer sees the file. Add one sentence to `commands.txt`: if a real key had already been committed and pushed, why is deleting the commit not enough?
-
-9. Short answer in `commands.txt`, two or three sentences. A RAG system gives a wrong answer. How would you tell whether retrieval or generation failed? Lecture 15 has the pipeline you need. Then stage your Activity 2 work and `commands.txt`, commit with the message "Add keys and calls", and push.
+8. Create a `.env` file in the repository root with a fake key line, for example `OPENROUTER_API_KEY=not-a-real-key`. Add `.env` to `.gitignore`, then run `git status` and paste the output into `commands.txt` to show that git no longer sees the file. Add one sentence to `commands.txt`: if a real key had already been committed and pushed, why is deleting the commit not enough? Then stage your Activity 2 work and `commands.txt`, commit with the message "Add keys and calls", and push.
 
 ## Activity 3: Data analysis on AWS EC2
 
 Lectures 16 and 17 cover this activity. The `aws/` directory holds `traffic_analysis.py` and `website_traffic.txt`: 30 days of fictional website traffic. The script prints summary statistics and saves a plot as `traffic_analysis.png`.
 
-10. Launch an EC2 instance from the AWS console: Ubuntu Server 26.04 LTS, instance type `t3.micro`, with a name of your choice and a security group that allows SSH. In the same launch wizard, create a new ED25519 key pair as a `.pem` file, or reuse one you already have. This is the one part of the quiz that happens in the browser. Never commit the `.pem` file: this repository's `.gitignore` already excludes `*.pem`.
+9. Launch an EC2 instance from the AWS console: Ubuntu Server 26.04 LTS, instance type `t3.micro`, with a name of your choice and a security group that allows SSH. In the same launch wizard, create a new ED25519 key pair as a `.pem` file, or reuse one you already have. This is the one part of the quiz that happens in the browser. Never commit the `.pem` file: this repository's `.gitignore` already excludes `*.pem`.
 
-11. Set the key's permissions with `chmod 400`, then connect to the instance with `ssh -i`. Copy the remote shell prompt line into `commands.txt` as proof that you are on the instance.
+10. Set the key's permissions with `chmod 400`, then connect to the instance with `ssh -i`. Copy the remote shell prompt line into `commands.txt` as proof that you are on the instance.
 
-12. On the instance, update the package lists, then install `python3`, `python3-pip`, `python3-pandas`, `python3-matplotlib` and `python3-seaborn` with apt. Add the commands to `commands.txt`.
+11. On the instance, update the package lists, then install `python3`, `python3-pip`, `python3-pandas`, `python3-matplotlib` and `python3-seaborn` with apt. Add the commands to `commands.txt`.
 
-13. From your laptop, copy `aws/traffic_analysis.py` and `aws/website_traffic.txt` to the instance with `scp`.
+12. From your laptop, copy `aws/traffic_analysis.py` and `aws/website_traffic.txt` to the instance with `scp`.
 
-14. On the instance, run the analysis and redirect its output into a file named `results.txt`. Then save the operating system identity with `cat /etc/os-release > os.txt`.
+13. On the instance, run the analysis and redirect its output into a file named `results.txt`. Then save the operating system identity with `cat /etc/os-release > os.txt`.
 
-15. From your laptop, copy `results.txt`, `os.txt` and `traffic_analysis.png` back into the `aws/` folder of your local repository with `scp`.
+14. From your laptop, copy `results.txt`, `os.txt` and `traffic_analysis.png` back into the `aws/` folder of your local repository with `scp`.
 
-16. Answer in `commands.txt`, two sentences: when you STOP an instance rather than terminate it, what do you still pay for, and what happens to its public IP address? Then terminate the instance, stage everything, commit with the message "Add AWS analysis results", and push. Done! 😊
+15. Answer in `commands.txt`, two sentences: when you STOP an instance rather than terminate it, what do you still pay for, and what happens to its public IP address? Then terminate the instance, stage everything, commit with the message "Add AWS analysis results", and push. Done! 😊
 
 ### Bonus tasks
 
