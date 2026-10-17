@@ -87,6 +87,6 @@ Attempt these only after finishing the main tasks, if you still have time. Docum
 
 1. Run your model with `--format json`, asking for a JSON object with the keys `answer` and `confidence`. Pipe the output through a one-line `python3 -c` command that prints only the `answer` field. Paste both the command and its output into `commands.txt`. Add `--nowordwrap` to the `ollama run` command: without it, Ollama breaks long lines and the JSON no longer parses.
 
-2. The `rag/` folder holds `rag.py` and its corpus from lecture 15. The script needs `ollama pull embeddinggemma`, the `llama3.2:1b` model and the `ollama` Python package, as in the lecture exercise. Run it from inside `rag/` twice: once with a question the corpus can answer, and once with "What is the capital of Nepal?" (change `QUESTION` in the script). Paste both score printouts into `commands.txt`, with one sentence on why retrieval still returns chunks for the Nepal question.
+2. The `rag/` folder holds `rag.py` and its corpus from lecture 15. The script needs `ollama pull embeddinggemma`, the `llama3.2:1b` model and `pip install ollama chromadb`, as in the lecture exercise. From inside `rag/`, run `python rag.py` twice and type a question each time: first "How big is the llama3.2:1b download?", then "Who won the 2022 World Cup?". Paste both outputs into `commands.txt`, with one sentence on why retrieval still returns three chunks for the World Cup question, and what the similarities tell you.
 
 Best of luck!

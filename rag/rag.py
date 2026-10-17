@@ -3,87 +3,57 @@
 Requires a running Ollama and two models:
     ollama pull embeddinggemma
     ollama pull llama3.2:1b
-And one Python package:
-    pip install ollama
+And two Python packages:
+    pip install ollama chromadb
 
-Change QUESTION below, then run from inside this folder: python rag.py
+Run from inside this folder: python rag.py
 """
 
-import math
 from pathlib import Path
 
+import chromadb
 import ollama
 
-EMBED_MODEL = "embeddinggemma"
-CHAT_MODEL = "llama3.2:1b"
-TOP_K = 3
-QUESTION = "What does Quiz 02 cover?"
-CORPUS = "corpus"   # the folder of notes, next to this script
+client = chromadb.Client()
+collection = client.create_collection(
+    name="notes",
+    configuration={"hnsw": {"space": "cosine"}})
 
-
-def embed(texts):
-    """Turn a list of texts into one vector per text."""
-    response = ollama.embed(model=EMBED_MODEL, input=texts)
-    return response["embeddings"]
-
-
-def cosine(a, b):
-    """Cosine similarity between two vectors of the same length."""
-    dot = 0.0
-    length_a = 0.0
-    length_b = 0.0
-    for i in range(len(a)):
-        dot = dot + a[i] * b[i]
-        length_a = length_a + a[i] * a[i]
-        length_b = length_b + b[i] * b[i]
-    return dot / (math.sqrt(length_a) * math.sqrt(length_b))
-
-
-# Split every markdown file into paragraph chunks
-chunks = []
-for path in sorted(Path(CORPUS).glob("*.md")):
+# Step 1: split the notes into paragraphs
+paragraphs = []
+files = []
+for path in Path("corpus").glob("*.md"):
     text = path.read_text(encoding="utf-8")
     for paragraph in text.split("\n\n"):
-        clean = paragraph.strip()
-        if len(clean) > 80:
-            chunks.append((path.name, clean))
+        if len(paragraph) > 80:
+            paragraphs.append(paragraph)
+            files.append({"file": path.name})
 
-files = set()
-for name, text in chunks:
-    files.add(name)
-print(f"Corpus: {len(chunks)} chunks from {len(files)} files")
+# Step 2: embed the paragraphs and store them
+# Chroma needs an ID for each one: "0", "1", "2"...
+ids = []
+for n in range(len(paragraphs)):
+    ids.append(str(n))
 
-chunk_texts = []
-for name, text in chunks:
-    chunk_texts.append(text)
+response = ollama.embed(
+    model="embeddinggemma", input=paragraphs)
+collection.add(ids=ids, embeddings=response["embeddings"],
+               documents=paragraphs, metadatas=files)
+print("Chunks stored:", collection.count())
 
-chunk_vectors = embed(chunk_texts)
-question_vector = embed([QUESTION])[0]
+# Step 3: find the 3 paragraphs closest to the question
+question = input("Your question: ")
 
-scores = []
-for vector in chunk_vectors:
-    scores.append(cosine(vector, question_vector))
+response = ollama.embed(model="embeddinggemma", input=question)
+results = collection.query(query_embeddings=response["embeddings"], n_results=3)
 
-ranked = []
-for i in range(len(chunks)):
-    ranked.append((scores[i], chunks[i]))
-ranked.sort(reverse=True)
-top = ranked[:TOP_K]
+data = results["documents"][0]
+print("Sources:", results["metadatas"][0])
+for distance in results["distances"][0]:
+    print("Similarity:", round(1 - distance, 2))
 
-print("\nRetrieved chunks:")
-for score, chunk in top:
-    name, text = chunk
-    print(f"  [{score:.3f}] {name}: {text[:70]}...")
+# Step 4: generate an answer from those paragraphs
+prompt = f"Using only this data: {data}. Answer this question: {question}"
 
-passages = []
-for score, chunk in top:
-    passages.append(chunk[1])
-context = "\n\n".join(passages)
-
-prompt = (
-    "Answer the question using ONLY the context below. "
-    "If the answer is not in the context, say you do not know.\n\n"
-    f"Context:\n{context}\n\nQuestion: {QUESTION}"
-)
-reply = ollama.chat(model=CHAT_MODEL, messages=[{"role": "user", "content": prompt}])
-print(f"\nAnswer:\n{reply.message.content}")
+output = ollama.generate(model="llama3.2:1b", prompt=prompt)
+print(output["response"])
