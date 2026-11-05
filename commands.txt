@@ -101,3 +101,8 @@ side of town. What about if we could provide some real-time updates on toda[4D
 today's conditions or predictions for tomorrow? Would that be helpful at al[2D[K
 all?
 
+
+# Task 6: stage, commit and push
+git add ollama/ commands.txt
+git commit -m "Add commentator chatbot"
+git push
