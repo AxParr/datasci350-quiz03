@@ -25,7 +25,7 @@ Answers you cannot explain, and AI use you do not list, earn no points.
 
 Lecture 12 covers everything in this activity.
 
-1. Download `granite4:350m`. Paste the output of `ollama show` and `ollama ls` for it into `commands.txt`. Use the [rule from lecture 12](https://danilofreire.github.io/datasci350/lectures/lecture-12/12-local-models.html#/quantisation) to predict its size on disk from its parameters and quantization, then write your prediction next to the size that `ollama ls` reports. (`BF16` uses 16 bits per weight.)
+1. Download `granite4:350m`. Paste the output of `ollama show` and `ollama ls` for it into `commands.txt`. Use the [rule from lecture 12](https://danilofreire.github.io/datasci350/lectures/lecture-12/12-local-models.html#/quantisation) to predict its size on disk from its parameters and quantisation, then write your prediction next to the size that `ollama ls` reports. (`BF16` uses 16 bits per weight.)
 
 2. Create `ollama/Modelfile` with `FROM granite4:350m`, `temperature` plus one other `PARAMETER`, and a `SYSTEM` block. The persona is an over-excited live sports commentator. State three rules: answers are at most four sentences, the model always addresses the user as "sports fans", and it says so on air when it does not know something.
 
