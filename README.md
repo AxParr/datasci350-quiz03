@@ -2,91 +2,79 @@
 
 ## Quiz 03 - AI-assisted programming and cloud computing
 
-### The scenario
+You will build a local chatbot with Ollama, call it from Python, and run an analysis on an AWS EC2 instance.
 
-You will do three things in this quiz. First, you will build a local chatbot with Ollama and give it a personality with a `Modelfile`. Second, you will call that model from Python and handle an API key safely. Third, you will rent a Linux machine on AWS EC2, send a small analysis script to it, run it there, and bring the results back.
+This quiz is worth 6% of the final grade, and covers lectures 12, 14, 15, 16 and 17. It is open-book and open-notes. It is an individual assessment, so please do not discuss the questions with your colleagues during class. You have 75 minutes.
 
-This quiz is worth 6% of the final grade, and covers lectures 12, 14, 16 and 17 (the second bonus task uses lecture 15). It is open-book and open-notes. It is an individual assessment: please do not discuss the questions with your colleagues during class. You have 75 minutes.
+You may use AI tools, but you must be able to explain every command and line you submit. I may ask any student to walk me through part of their work during or after the quiz.
 
-You may use AI tools on the same terms as the rest of the course: they are allowed, and you must be able to explain every command and every line you submit. The instructor may ask any student to walk through part of their work, during the quiz or right after it. An answer you cannot explain earns no marks.
+At the end of `commands.txt`, say which tasks used AI and which tool, give one example prompt, and say if an AI agent ran commands for you. Any task you do not list counts as done without AI. If you used none, write `AI: none`.
+
+Answers you cannot explain, and AI use you do not list, earn no points.
 
 ### Rules
 
-- Record every command you run in a file named `commands.txt` in the repository's root directory. Where a task asks for a short explanation or for pasted output, write it in `commands.txt` too.
-- Work from the command line and your editor throughout. Files created or uploaded through the GitHub website lose points: the grader reads your commit history.
-- **Screenshots are not accepted.** Model responses, terminal output and prompts go in as copy-pasted text.
-- There is one exception to the command-line rule. Launching the EC2 instance happens in the AWS console because there is no other way to do it. Everything after you connect to the instance is terminal work.
-- When you finish, post the link to your fork on Canvas, in the "Assignments" tab under Quiz 03.
-
-### If `git push` asks for credentials
-
-Your machine should already be logged in to GitHub. If a push fails with an authentication error, do not waste time creating tokens: run `gh auth login`, choose GitHub.com, then HTTPS, and log in with the browser. After that, `git push` works normally.
-
-### Setup
-
-1. Fork this repository to your GitHub account.
-2. Clone your fork to your machine with the command line.
-3. Change directory into the cloned repository.
-4. Create `commands.txt` in the root of the repository.
+- Fork and clone this repository.
+- Record every command, explanation and requested output in `commands.txt`, in the repository root on your laptop. Write git commands there before you run them.
+- Paste text. Screenshots are not accepted.
+- Work in the command line and your editor. You may fork on the GitHub website, but files created or uploaded there lose points.
+- Use the AWS console only to launch the instance, find its public DNS and, at the end of the quiz, terminate it.
+- When you finish, post your fork's link on Canvas, under "Assignments", Quiz 03.
 
 ## Activity 1: A sports-commentator chatbot with Ollama
 
 Lecture 12 covers everything in this activity.
 
-1. Pull one small model: `llama3.2:1b` or `gemma3:1b`. Both are around 1 GB and run comfortably on a laptop. Then run `ollama ls` and paste the output into `commands.txt`.
+1. Download `granite4:350m`. Paste the output of `ollama show` and `ollama ls` for it into `commands.txt`. Use the [rule from lecture 12](https://danilofreire.github.io/datasci350/lectures/lecture-12/12-local-models.html#/quantisation) to predict its size on disk from its parameters and quantization, then write your prediction next to the size that `ollama ls` reports. (`BF16` uses 16 bits per weight.)
 
-2. Run `ollama show` on the model you pulled. Record its parameter count, context length and quantization in `commands.txt`. Add one sentence explaining how the quantization links the parameter count to the size on disk that `ollama ls` reports.
+2. Create `ollama/Modelfile` with `FROM granite4:350m`, `temperature` plus one other `PARAMETER`, and a `SYSTEM` block. The persona is an over-excited live sports commentator. State three rules: answers are at most four sentences, the model always addresses the user as "sports fans", and it says so on air when it does not know something.
 
-3. Create a directory named `ollama` in the repository, and a file named `Modelfile` inside it. The `Modelfile` must contain a `FROM` line, at least two `PARAMETER` lines (`temperature` plus one other of your choice), and a `SYSTEM` block. The `SYSTEM` block gives the model its persona: an over-excited live sports commentator who narrates every answer like a play-by-play broadcast. State these three rules in the prompt:
+3. Build the model with `ollama create`, naming it `commentator`. Add one sentence explaining why this command downloads nothing.
 
-    1. Answers are at most four sentences long.
-    2. The model always addresses the user as "sports fans".
-    3. If the model does not know something, it says so on air instead of inventing an answer.
-
-4. Build the model with `ollama create`, naming it `commentator`. Add one sentence to `commands.txt` explaining why this command downloads nothing from the internet.
-
-5. Test the model with exactly these three prompts, each as a separate `ollama run` command, and paste each response into `commands.txt`:
+4. Run these two prompts, each as a separate `ollama run` command. Paste each response and note which rules held, which broke and which did not apply:
 
     - `"What does git commit do?"`
     - `"What is the weather in Atlanta right now?"`
-    - `"What did I ask you in yesterday's session?"`
 
-    For each response, note which of your three rules held and which broke. Small models break rules often, and spotting the break is the point of the task.
+5. Add a `MESSAGE` example to your `Modelfile` that teaches the model to say it does not know the weather, then rebuild it. Run the weather prompt three times, paste the responses, and say how many times the model admitted it did not know. Hint: see the ["Teaching by example" slide](https://danilofreire.github.io/datasci350/lectures/lecture-12/12-local-models.html#/teaching-by-example) in lecture 12.
 
 6. Stage the `ollama/` folder and `commands.txt`, commit with the message "Add commentator chatbot", and push.
 
-## Activity 2: Keys and calls
+## Activity 2: Calling the model from Python
 
-Lecture 14 covers this activity.
+Lecture 14 covers this activity. Your `MESSAGE` example may make the model give odd answers or refuse questions. That is fine, because these tasks are about the script output.
 
-7. Write `ollama/ask_local.py`: a script that uses the `openai` package to talk to your local Ollama server, asks your model one question at temperature 0, and prints the reply. The lecture 14 slides show how to point the client at the local server. Run it and paste the reply into `commands.txt`.
+7. Run `ollama/ask_local.py`, which asks `granite4:350m` a question and prints `response.usage`. In the script, change the model to `commentator` and run it again. Paste both outputs into `commands.txt`. In one sentence, why does `commentator` use more `prompt_tokens` for the same question?
 
-8. Create a `.env` file in the repository root with a fake key line, for example `OPENROUTER_API_KEY=not-a-real-key`. Add `.env` to `.gitignore`, then run `git status` and paste the output into `commands.txt` to show that git no longer sees the file. Add one sentence to `commands.txt`: if a real key had already been committed and pushed, why is deleting the commit not enough? Then stage your Activity 2 work and `commands.txt`, commit with the message "Add keys and calls", and push.
+8. Run `ollama/ask_json.py`. It fails. Paste the error and the `finish_reason` it prints into `commands.txt`. Change one line so the script works, then paste the new output. In one sentence, why did the script fail? Stage `ollama/` and `commands.txt`, commit with the message "Add Python calls", and push.
 
 ## Activity 3: Data analysis on AWS EC2
 
 Lectures 16 and 17 cover this activity. The `aws/` directory holds `traffic_analysis.py` and `website_traffic.txt`: 30 days of fictional website traffic. The script prints summary statistics and saves a plot as `traffic_analysis.png`.
 
-9. Launch an EC2 instance from the AWS console: Ubuntu Server 26.04 LTS, instance type `t3.micro`, with a name of your choice and a security group that allows SSH. In the same launch wizard, create a new ED25519 key pair as a `.pem` file, or reuse one you already have. This is the one part of the quiz that happens in the browser. Never commit the `.pem` file: this repository's `.gitignore` already excludes `*.pem`.
+9. Launch an EC2 instance from the AWS console: Ubuntu Server 26.04 LTS, instance type `t3.micro`, with a name of your choice and a security group that allows SSH. In the same launch wizard, create a new ED25519 key pair as a `.pem` file, or reuse one you already have. Never commit the `.pem` file: this repository's `.gitignore` already excludes `*.pem`.
 
 10. Set the key's permissions with `chmod 400`, then connect to the instance with `ssh -i`. Copy the remote shell prompt line into `commands.txt` as proof that you are on the instance.
 
-11. On the instance, update the package lists, then install `python3`, `python3-pip`, `python3-pandas`, `python3-matplotlib` and `python3-seaborn` with apt. Add the commands to `commands.txt`.
+11. On the instance, update the package lists, then install `python3-pandas`, `python3-matplotlib` and `python3-seaborn` with apt. Add the commands to `commands.txt`.
 
-12. From your laptop, copy `aws/traffic_analysis.py` and `aws/website_traffic.txt` to the instance with `scp`.
+12. In a new terminal on your laptop, copy `aws/traffic_analysis.py` and `aws/website_traffic.txt` to the instance with `scp`. Run `scp` from the repository root, with the full path to your key.
 
-13. On the instance, run the analysis and redirect its output into a file named `results.txt`. Then save the operating system identity with `cat /etc/os-release > os.txt`.
+13. On the instance, run `traffic_analysis.py` with `python3` and redirect its output into a file named `results.txt`. Then, still on the instance, paste these two commands exactly as written. The first adds your instance's ID to `results.txt`, and the second saves a hash of that file in `fingerprint.txt`:
 
-14. From your laptop, copy `results.txt`, `os.txt` and `traffic_analysis.png` back into the `aws/` folder of your local repository with `scp`.
+    ```bash
+    cat /var/lib/cloud/data/instance-id >> results.txt
+    sha256sum results.txt > fingerprint.txt
+    ```
 
-15. Answer in `commands.txt`, two sentences: when you STOP an instance rather than terminate it, what do you still pay for, and what happens to its public IP address? Then terminate the instance, stage everything, commit with the message "Add AWS analysis results", and push. Done! 😊
+14. In the terminal on your laptop, from the repository root, copy `results.txt`, `fingerprint.txt` and `traffic_analysis.png` back from the EC2 instance into the `aws/` folder with `scp`, using the full path to your key.
 
-### Bonus tasks
+15. Answer in `commands.txt`, in one sentence: when you STOP an instance rather than terminate it, what do you still pay for? Then terminate the instance, add your AI note, **stage everything**, commit with the message "Add AWS analysis results", and push. Done! 😊
 
-Attempt these only after finishing the main tasks, if you still have time. Document every step in `commands.txt`, then commit and push again.
+### Bonus task
 
-1. Run your model with `--format json`, asking for a JSON object with the keys `answer` and `confidence`. Pipe the output through a one-line `python3 -c` command that prints only the `answer` field. Paste both the command and its output into `commands.txt`. Add `--nowordwrap` to the `ollama run` command: without it, Ollama breaks long lines and the JSON no longer parses.
+Attempt this only after finishing the main tasks, if you still have time. Document every step in `commands.txt`, then commit and push again.
 
-2. The `rag/` folder holds `rag.py` and its corpus from lecture 15. The script needs `ollama pull embeddinggemma`, the `llama3.2:1b` model and `pip install ollama chromadb`, as in the lecture exercise. From inside `rag/`, run `python rag.py` twice and type a question each time: first "How big is the llama3.2:1b download?", then "Who won the 2022 World Cup?". Paste both outputs into `commands.txt`, with one sentence on why retrieval still returns three chunks for the World Cup question, and what the similarities tell you.
+The `rag/` folder holds `rag.py` and its corpus from lecture 15. The script needs `ollama pull embeddinggemma`, the `llama3.2:1b` model and `pip install ollama chromadb`, as in the lecture exercise. From inside `rag/`, run `python rag.py` twice and type a question each time: first "How big is the llama3.2:1b download?", then "Who won the 2022 World Cup?". Paste both outputs into `commands.txt`, with one sentence on why retrieval still returns three chunks for the World Cup question, and what the similarities tell you.
 
 Best of luck!
