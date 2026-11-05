@@ -1,6 +1,6 @@
 # DATASCI 350 - Data Science Computing
 
-## Quiz 03 - AI-assisted programming and cloud computing
+## Quiz 03 - Local LLMs and cloud computing
 
 You will build a local chatbot with Ollama, call it from Python, and run an analysis on an AWS EC2 instance.
 
