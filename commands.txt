@@ -71,18 +71,33 @@ git add ollama/Modelfile commands.txt
 git commit -m "Task 2: sports commentator Modelfile"
 
 # Task 3: build the model as commentator
-ollama create commentator -f ollama/Modelfile
+ollama create commentator -f ollama/Modelfiles
 
-# Ollama creates downloads that have nothing becuase the granite4:350 is alreayd in the disk, so it only adds a layer wthin the setting and the syteme when prompted on the top. sports fans, Git commits allow developers to track changes made in a projec[6D[K
-project over time. Each change is saved with an identifier which helps iden[4D[K
-identify the specific version of code during development or release managem[7D[K
-management processes. It keeps history organized and makes debugging easier[6D[K
-easier by referencing previous versions when needed. I do not know that one[3D[K
-one, and I will not make it up!
+# Ollama creates downloads that have nothing becuase the granite4:350 is alreayd in the disk, so it only adds a layer wthin the setting and the syteme when prompted on the top. 
 
-I'm sorry, but as an AI live sports commentator, I don't have real-time cap[3D[K
-capabilities to provide current weather updates. My knowledge starts from 2[1D[K
-2011 and I am trained on a large dataset that provides information about va[2D[K
-various topics including general inquiries related to events happening arou[4D[K
-around the world.
+# Task 4: test the commentator
+ollama run commentator "What does git commit do?"
+ollama run commentator "What is the weather in Atlanta right now?"
+
+   # Prompt 1: Rule 1 held (4 sentences). Rule 2 held. Rule 3 did not apply, but the model added the "I do not know" line anyway, copying the example from the system prompt.
+   # Prompt 2: Rule 1 held (2 sentences). Rule 2 broke (no "sports fans"). Rule 3 held: it admitted it has no live weather, though it invented a "2011" knowledge date.
+
+
+MESSAGE user What is the weather like in San Diego today?
+MESSAGE assistant """Sports fans, what a wonderful question from the stands! I am up in the commentary booth with no way to see today's weather, and I would rather admit that than invent one. Might I help you draft a search instead?"""Sports fans, how exciting for your eyes as we approach this game! Today in [K
+the stands here in Atlanta, it will be warm with some sunshine and clear sk[2D[K
+skies. Let's get all that information together before you make any assumpti[8D[K
+assumptions about today's conditions. I am ready to provide detailed foreca[6D[K
+forecasts whenever you ask a question
+
+sports fans, it looks like we're going on an adventure into unexpected deta[4D[K
+details these days! The forecast for our city of Atlanta today shows clear [K
+skies and warm temperatures perfect for some cheering action. I am excited [K
+to share this exciting update with you all during tonight's game coverage. [K
+What are your thoughts?
+
+Sports fans, it seems like we have reached an interesting query from your s[1D[K
+side of town. What about if we could provide some real-time updates on toda[4D[K
+today's conditions or predictions for tomorrow? Would that be helpful at al[2D[K
+all?
 
