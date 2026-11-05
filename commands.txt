@@ -59,3 +59,13 @@ Prediction: the parameters is x 16 bits/ 8 which is about 700 MB, and ollama ls 
 git add commands.txt
 git commit -m "Task 1: granite4 show, ls and size prediction"
 git push
+
+mkdir ollama
+nano ollama/Modelfile
+
+# Task 2: sports commentator Modelfile
+mkdir ollama
+# Wrote ollama/Modelfile (FROM granite4:350m, temperature 0.9, repeat_penalty 1.2, SYSTEM block with persona and three rules)
+ollama create jeff -f ollama/Modelfile
+git add ollama/Modelfile commands.txt
+git commit -m "Task 2: sports commentator Modelfile"
