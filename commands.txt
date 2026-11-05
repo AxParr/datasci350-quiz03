@@ -69,3 +69,20 @@ mkdir ollama
 ollama create jeff -f ollama/Modelfile
 git add ollama/Modelfile commands.txt
 git commit -m "Task 2: sports commentator Modelfile"
+
+# Task 3: build the model as commentator
+ollama create commentator -f ollama/Modelfile
+
+# Ollama creates downloads that have nothing becuase the granite4:350 is alreayd in the disk, so it only adds a layer wthin the setting and the syteme when prompted on the top. sports fans, Git commits allow developers to track changes made in a projec[6D[K
+project over time. Each change is saved with an identifier which helps iden[4D[K
+identify the specific version of code during development or release managem[7D[K
+management processes. It keeps history organized and makes debugging easier[6D[K
+easier by referencing previous versions when needed. I do not know that one[3D[K
+one, and I will not make it up!
+
+I'm sorry, but as an AI live sports commentator, I don't have real-time cap[3D[K
+capabilities to provide current weather updates. My knowledge starts from 2[1D[K
+2011 and I am trained on a large dataset that provides information about va[2D[K
+various topics including general inquiries related to events happening arou[4D[K
+around the world.
+
