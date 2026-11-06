@@ -8,7 +8,7 @@ response = client.chat.completions.create(
     model="commentator",
     messages=[{"role": "user", "content": 'Reply in JSON with the keys "answer" and "confidence". What does git commit do?'}],
     temperature=0,
-    max_tokens=15,
+    max_tokens=300,
     response_format={"type": "json_object"},
 )
 

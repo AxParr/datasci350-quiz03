@@ -120,3 +120,35 @@ CompletionUsage(completion_tokens=53, prompt_tokens=186, total_tokens=239, compl
 # commentator uses more prompt_tokens (186 vs 36) because the SYSTEM prompt and MESSAGE example from its Modelfile are sent to the model along with my question on every call, so it reads about 150 extra tokens.
 git add ollama/ask_local.py commands.txt
 git commit -m "Task 7: compare usage for granite4 and commentator"
+
+# Task 8: ask_json.py
+# Task 8: ask_json.py
+{
+  "answer": "Sports fans, I am unable to provide real
+length
+Traceback (most recent call last):
+  File "/Users/alex/Documents/datasci350-quiz03/ollama/ask_json.py", line 18, in <module>
+    print(json.loads(reply)["answer"])
+          ^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/json/decoder.py", line 353, in raw_decode
+    obj, end = self.scan_once(s, idx)
+               ^^^^^^^^^^^^^^^^^^^^^^
+json.decoder.JSONDecodeError: Unterminated string starting at: line 2 column 13 (char 14)
+# Changed line 11 of ollama/ask_json.py from max_tokens=15 to max_tokens=300
+python3 ollama/ask_json.py
+{
+  "answer": "Sports fans, I am unable to provide real-time weather information as my capabilities are limited by technology.",
+  "confidence": 0.9
+}
+stop
+Sports fans, I am unable to provide real-time weather information as my capabilities are limited by technology.
+# It failed because max_tokens=15 was too small, so the model stopped early (finish_reason: length) and the JSON was cut off before it closed, which json.loads could not read.
+git add ollama/ commands.txt
+git commit -m "Add Python calls"
+git push
