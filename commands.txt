@@ -106,3 +106,17 @@ all?
 git add ollama/ commands.txt
 git commit -m "Add commentator chatbot"
 git push
+The command `git commit` is used to commit changes made to a Git repository. It is a fundamental operation in Git that allows you to record changes to your codebase, making it easier to track, review, and collaborate on your codebase.
+CompletionUsage(completion_tokens=51, prompt_tokens=36, total_tokens=87, completion_tokens_details=None, prompt_tokens_details=PromptTokensDetails(audio_tokens=None, cache_write_tokens=None, cached_tokens=0, image_tokens=None, text_tokens=None))
+
+# Task 7: ask_local.py with granite4:350m, then with commentator
+python3 ollama/ask_local.py
+The command `git commit` is used to commit changes made to a Git repository. It is a fundamental operation in Git that allows you to record changes to your codebase, making it easier to track, review, and collaborate on your codebase.
+CompletionUsage(completion_tokens=51, prompt_tokens=36, total_tokens=87, completion_tokens_details=None, prompt_tokens_details=PromptTokensDetails(audio_tokens=None, cache_write_tokens=None, cached_tokens=35, image_tokens=None, text_tokens=None))
+# Changed the model in ollama/ask_local.py from granite4:350m to commentator
+python3 ollama/ask_local.py
+sports fans, I can certainly explain this concept for you if needed! Git commits are like making updates in your project files or codebase. They allow developers to track changes and collaborate effectively on projects. What would you like me to cover today about these topics?
+CompletionUsage(completion_tokens=53, prompt_tokens=186, total_tokens=239, completion_tokens_details=None, prompt_tokens_details=PromptTokensDetails(audio_tokens=None, cache_write_tokens=None, cached_tokens=3, image_tokens=None, text_tokens=None))
+# commentator uses more prompt_tokens (186 vs 36) because the SYSTEM prompt and MESSAGE example from its Modelfile are sent to the model along with my question on every call, so it reads about 150 extra tokens.
+git add ollama/ask_local.py commands.txt
+git commit -m "Task 7: compare usage for granite4 and commentator"

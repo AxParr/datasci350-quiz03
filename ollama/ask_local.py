@@ -3,7 +3,7 @@ from openai import OpenAI
 client = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")
 
 response = client.chat.completions.create(
-    model="granite4:350m",
+    model="commentator",
     messages=[{"role": "user", "content": "What does git commit do?"}],
     temperature=0,
 )
