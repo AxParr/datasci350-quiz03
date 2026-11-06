@@ -154,3 +154,6 @@ git commit -m "Add Python calls"
 git push
 git add commands.txt
 git commit -m "Task 9: launch EC2 instance"
+git add .
+git commit -m "Add AWS analysis results"
+git push
