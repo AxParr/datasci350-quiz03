@@ -152,3 +152,5 @@ Sports fans, I am unable to provide real-time weather information as my capabili
 git add ollama/ commands.txt
 git commit -m "Add Python calls"
 git push
+git add commands.txt
+git commit -m "Task 9: launch EC2 instance"
